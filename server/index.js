@@ -25,6 +25,9 @@ app.use(
   })
 );
 
+//AUTHENTICATION
 app.post("/auth/register", ac.register);
+app.post("/auth/login", ac.login);
+app.get("/auth/logout", ac.logout);
 
 app.listen(SERVER_PORT, () => console.log(`Yooo I'm on port ${SERVER_PORT}`));
