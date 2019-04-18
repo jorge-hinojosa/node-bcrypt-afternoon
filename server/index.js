@@ -4,6 +4,7 @@ const session = require("express-session");
 const massive = require("massive");
 
 const ac = require("./controllers/authController");
+const tc = require("./controllers/treasureController");
 
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 const app = express();
@@ -29,5 +30,8 @@ app.use(
 app.post("/auth/register", ac.register);
 app.post("/auth/login", ac.login);
 app.get("/auth/logout", ac.logout);
+
+//TREAURE
+app.get("/api/treasure/dragon", tc.dragonTreasure);
 
 app.listen(SERVER_PORT, () => console.log(`Yooo I'm on port ${SERVER_PORT}`));
