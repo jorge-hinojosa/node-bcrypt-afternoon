@@ -22,5 +22,10 @@ module.exports = {
       .add_user_treasure([treasureUrl, id])
       .catch(err => console.log(err));
     res.status(200).json(treasure);
+  },
+  allTreasure: async (req, res) => {
+    const db = req.app.get("db");
+    const treasure = await db.get_all_treasure().catch(err => console.log(err));
+    res.status(200).json(treasure);
   }
 };

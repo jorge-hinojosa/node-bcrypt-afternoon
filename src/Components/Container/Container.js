@@ -12,6 +12,7 @@ export default class Container extends Component {
     this.addMyTreasure = this.addMyTreasure.bind(this);
     this.getDragonTreasure = this.getDragonTreasure.bind(this);
     this.getMyTreasure = this.getMyTreasure.bind(this);
+    this.getAllTreasure = this.getAllTreasure.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -35,14 +36,25 @@ export default class Container extends Component {
   }
 
   getAllTreasure() {
-    // axios GET to /api/treasure/all here
+    axios
+      .get("/api/treasure/all")
+      .then(treasure => {
+        // console.log(treasure);
+        this.setState({
+          treasures: {
+            ...this.state.treasures,
+            all: treasure.data
+          }
+        });
+      })
+      .catch(err => alert(err.response.request.response));
   }
 
   getMyTreasure() {
-    console.log("also here");
     axios
       .get("/api/treasure/user")
       .then(treasure => {
+        console.log(treasure);
         this.setState({
           treasures: {
             ...this.state.treasures,
@@ -67,7 +79,7 @@ export default class Container extends Component {
   render() {
     const { username } = this.props.user;
     const { dragon, user, all } = this.state.treasures;
-    console.log(user, username);
+    console.log(all, username);
     return (
       <div className="Container">
         {dragon ? (
@@ -99,7 +111,6 @@ export default class Container extends Component {
             <button
               className="title"
               onClick={() => {
-                console.log("here");
                 this.getMyTreasure();
               }}
               name="user"
