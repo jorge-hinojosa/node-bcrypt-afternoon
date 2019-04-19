@@ -4,6 +4,8 @@ const session = require("express-session");
 const massive = require("massive");
 
 const ac = require("./controllers/authController");
+const am = require("./middlewares/authMiddleware");
+
 const tc = require("./controllers/treasureController");
 
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
@@ -16,8 +18,6 @@ massive(CONNECTION_STRING)
   })
   .catch(err => console.log(err));
 
-app.use(express.json());
-
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -26,12 +26,15 @@ app.use(
   })
 );
 
+app.use(express.json());
 //AUTHENTICATION
 app.post("/auth/register", ac.register);
 app.post("/auth/login", ac.login);
 app.get("/auth/logout", ac.logout);
 
-//TREAURE
+//TREASURE
 app.get("/api/treasure/dragon", tc.dragonTreasure);
+app.get("/api/treasure/user", am.usersOnly, tc.userTreasure);
+app.post("/api/treasure/user", am.usersOnly, tc.addUserTreasure);
 
 app.listen(SERVER_PORT, () => console.log(`Yooo I'm on port ${SERVER_PORT}`));
